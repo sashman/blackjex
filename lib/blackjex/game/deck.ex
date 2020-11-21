@@ -50,10 +50,15 @@ defmodule Blackjex.Game.Deck do
     %__MODULE__{cards: cards}
   end
 
+
+  @spec take_card(%{cards: [any]}) :: {:error, <<_::144>>} | {:ok, any, %{cards: [any]}}
   @doc ~S"""
-  Take card from top of the deck
+  Take card from top of the deck, errors if no more cards are left
 
   ## Examples
+
+      iex> %Blackjex.Game.Deck{cards: []} |> Blackjex.Game.Deck.take_card()
+      {:error, "no more cards left"}
 
       iex> %Blackjex.Game.Deck{cards: [
       ...>  %Card{rank: "ACE", suit: "Club"},
@@ -63,6 +68,8 @@ defmodule Blackjex.Game.Deck do
       {:ok, %Card{rank: "ACE", suit: "Club"}, %Blackjex.Game.Deck{cards: [%Card{rank: "ACE", suit: "Spade"}, %Card{rank: "ACE", suit: "Diamond"}]}}
 
   """
+  def take_card(%__MODULE__{cards: cards}) when length(cards) < 1, do: {:error, "no more cards left"}
+
   def take_card(deck) do
     {card, new_cards} = List.pop_at(deck.cards, 0)
     new_deck = %{deck | cards: new_cards}
