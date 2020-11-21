@@ -197,5 +197,33 @@ defmodule Blackjex.GameStateTest do
       assert length(result.deck.cards) == @deck_size
       assert _rounds = [%Round{loss: true}]
     end
+
+    test "resets game when max score is hit" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "9", suit: "Spade"},
+            %Card{rank: "2", suit: "Hearts"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      game = GameState.hit(game)
+      game = GameState.hit(game)
+      result = GameState.apply_win_condition(game)
+
+      _rounds = result.rounds
+
+      assert result.player.score == 0
+      assert result.player.hand == []
+      assert length(result.deck.cards) == @deck_size
+      assert _rounds = [%Round{loss: false, score: 21}]
+    end
   end
 end

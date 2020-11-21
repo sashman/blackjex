@@ -62,13 +62,19 @@ defmodule Blackjex.Game.ServerState do
   end
 
   def stick(server_state = %__MODULE__{}, game_id) do
-    server_state.game_states[game_id]
-    |> GameState.stick()
+    game_state =
+      server_state.game_states[game_id]
+      |> GameState.stick()
+
+    {:ok, server_state |> update_game_state(game_id, game_state)}
   end
 
   def cards(server_state = %__MODULE__{}, game_id) do
-    server_state.game_states[game_id]
-    |> GameState.show_player()
+    game_state =
+      server_state.game_states[game_id]
+      |> GameState.show_player()
+
+    {:ok, server_state |> update_game_state(game_id, game_state)}
   end
 
   defp update_game_state(server_state = %__MODULE__{}, game_id, game_state) do

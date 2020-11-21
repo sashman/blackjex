@@ -43,7 +43,8 @@ defmodule Blackjex.Game.GameState do
     |> WinCondition.round_over?()
     |> case do
       {:loss, _, _} -> round_lost(game_state)
-      _ -> game_state
+      {:max_score, _, _} -> game_state |> record_round() |> reset_for_new_round()
+      {_} -> game_state
     end
   end
 
