@@ -1,7 +1,7 @@
 defmodule Blackjex.Game.GameState do
-  alias Blackjex.Game.{Deck, Player}
+  alias Blackjex.Game.{Deck, Player, Round}
 
-  defstruct [:deck, :player]
+  defstruct [:deck, :player, rounds: []]
 
   @doc ~S"""
   Creates a new game state with a deck and a player, when give an optional player name
@@ -28,12 +28,39 @@ defmodule Blackjex.Game.GameState do
   Get a card from the deck and give it to the player
   """
   def hit(game_state = %__MODULE__{deck: deck, player: player}) do
-    {:ok, card, new_deck} = deck
+    {:ok, card, new_deck} =
+      deck
       |> Deck.take_card()
 
-    new_player =  Player.receive_card(player, card)
+    new_player = Player.receive_card(player, card)
 
     %{game_state | deck: new_deck, player: new_player}
   end
 
+  def stick(game_state = %__MODULE__{}) do
+    game_state
+    |> record_round()
+    |> reset_for_new_round()
+  end
+
+  defp record_round(game_state = %__MODULE__{rounds: rounds, player: player}) do
+    %Player{score: score, hand: hand} = player
+    new_rounds = rounds ++ [%Round{score: score, hand: hand}]
+    %{game_state | rounds: new_rounds}
+  end
+
+  defp reset_for_new_round(game_state = %__MODULE__{player: player}) do
+    new_deck = Deck.new_deck()
+
+    new_player =
+      player
+      |> Player.reset_hand()
+      |> Player.reset_score()
+
+    %{game_state | player: new_player, deck: new_deck}
+  end
+
+  def player_hand(game_state) do
+    game_state.player.hand
+  end
 end

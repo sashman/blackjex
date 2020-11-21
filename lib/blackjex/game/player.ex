@@ -12,4 +12,12 @@ defmodule Blackjex.Game.Player do
     %{new_player | score: score}
   end
 
+  def reset_hand(player) do
+    %{player | hand: []}
+  end
+
+  def reset_score(player) do
+    %{player | score: 0}
+  end
+
 end
