@@ -20,7 +20,6 @@ defmodule Blackjex.Client.Prompt do
     name = ExPrompt.string("What is your name? ")
 
     Client.call(sid, {:join, name})
-    |> IO.inspect()
     |> View.render()
   end
 
@@ -33,7 +32,6 @@ defmodule Blackjex.Client.Prompt do
     answer = @options |> Enum.at(answer) |> elem(1)
 
     Client.call(sid, {answer})
-    |> IO.inspect()
     |> View.render()
 
     ask_for_input(sid)

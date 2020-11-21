@@ -19,9 +19,9 @@ defmodule Blackjex.Client.View do
     "7" => "7",
     "8" => "8",
     "9" => "9",
-    "Jack" => "B",
-    "Queen" => "D",
-    "King" => "E"
+    "Jack" => "J",
+    "Queen" => "Q",
+    "King" => "K"
   }
 
   def render({:join, data}) do
@@ -46,7 +46,7 @@ defmodule Blackjex.Client.View do
     IO.puts(@border)
   end
 
-  def render({:hit, data}) do
+  def render({:hit, :continue, data}) do
     cards = data.player.hand
     IO.puts(@border)
     render_cards(cards)
@@ -54,7 +54,37 @@ defmodule Blackjex.Client.View do
     IO.puts(@border)
   end
 
+  def render({:hit, :loss, data}) do
+    lost_round = List.last(data.rounds)
+    IO.puts(@border)
+    IO.puts("You lost!")
+    render_cards(lost_round.hand)
+    IO.puts("Your score was #{lost_round.score}")
+    IO.puts("Your hand is now empty")
+    IO.puts(@border)
+  end
+
+  def render({:hit, :max_score, data}) do
+    lost_round = List.last(data.rounds)
+    IO.puts(@border)
+    render_cards(lost_round.hand)
+    IO.puts("Your score was #{lost_round.score}! Congratulations!")
+    IO.puts("Your hand is now empty")
+    IO.puts(@border)
+  end
+
+  def render({:stick, data}) do
+    cards = data.player.hand
+    IO.puts(@border)
+    IO.puts("New round")
+    IO.puts(@border)
+  end
+
   def render({view, _data}) do
+    IO.inspect(view, label: "rendering")
+  end
+
+  def render({view, _data, _}) do
     IO.inspect(view, label: "rendering")
   end
 
