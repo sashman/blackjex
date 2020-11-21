@@ -37,19 +37,19 @@ defmodule Blackjex.Game.Deck do
   """
 
   def new_deck() do
-    cards = @suits
-    |> Enum.flat_map(fn suit ->
-      @value_map
-      |> Map.keys()
-      |> Enum.map(fn rank ->
-        %Card{rank: rank, suit: suit}
+    cards =
+      @suits
+      |> Enum.flat_map(fn suit ->
+        @value_map
+        |> Map.keys()
+        |> Enum.map(fn rank ->
+          %Card{rank: rank, suit: suit}
+        end)
       end)
-    end)
-    |> Enum.shuffle()
+      |> Enum.shuffle()
 
     %__MODULE__{cards: cards}
   end
-
 
   @doc ~S"""
   Take card from top of the deck, errors if no more cards are left
@@ -67,13 +67,20 @@ defmodule Blackjex.Game.Deck do
       {:ok, %Card{rank: "ACE", suit: "Club"}, %Blackjex.Game.Deck{cards: [%Card{rank: "ACE", suit: "Spade"}, %Card{rank: "ACE", suit: "Diamond"}]}}
 
   """
-  def take_card(%__MODULE__{cards: cards}) when length(cards) < 1, do: {:error, "no more cards left"}
+  def take_card(%__MODULE__{cards: cards}) when length(cards) < 1,
+    do: {:error, "no more cards left"}
 
   def take_card(deck) do
     {card, new_cards} = List.pop_at(deck.cards, 0)
     new_deck = %{deck | cards: new_cards}
 
     {:ok, card, new_deck}
+  end
+
+  def put_cards_back(deck = %__MODULE__{cards: cards}, cards_to_put) when is_list(cards_to_put) do
+    cards = cards ++ cards_to_put
+
+    %{deck | cards: cards}
   end
 
   def card_value(card = %Card{}) do

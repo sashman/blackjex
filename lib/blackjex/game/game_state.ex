@@ -71,8 +71,8 @@ defmodule Blackjex.Game.GameState do
 
   defp new_rounds(rounds, score, hand, _), do: rounds ++ [%Round{score: score, hand: hand}]
 
-  def reset_for_new_round(game_state = %__MODULE__{player: player}) do
-    new_deck = Deck.new_deck()
+  def reset_for_new_round(game_state = %__MODULE__{player: player, deck: deck}) do
+    new_deck = Deck.put_cards_back(deck, player.hand)
 
     new_player =
       player

@@ -3,8 +3,6 @@ defmodule Blackjex.GameStateTest do
   alias Blackjex.Game.{GameState, Player, Card, Round}
   doctest Blackjex.Game.GameState
 
-  @deck_size 12 * 4
-
   describe ".hit" do
     test "take a card from the deck and give it to the player" do
       game = %GameState{
@@ -74,7 +72,7 @@ defmodule Blackjex.GameStateTest do
              ]
     end
 
-    test "resets deck and player hand and score" do
+    test "resets player hand and score" do
       game = %GameState{
         deck: %Blackjex.Game.Deck{
           cards: [
@@ -93,7 +91,29 @@ defmodule Blackjex.GameStateTest do
 
       assert result.player.score == 0
       assert result.player.hand == []
-      assert length(result.deck.cards) == @deck_size
+    end
+
+    test "resets player hand back to deck" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "ACE", suit: "Spade"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      result = GameState.stick(game)
+
+      assert result.deck.cards == [
+               %Card{rank: "ACE", suit: "Spade"},
+               %Card{rank: "King", suit: "Club"}
+             ]
     end
   end
 
@@ -127,12 +147,14 @@ defmodule Blackjex.GameStateTest do
     end
 
     test "resets deck and player hand and score" do
+      cards = [
+        %Card{rank: "King", suit: "Club"},
+        %Card{rank: "ACE", suit: "Spade"}
+      ]
+
       game = %GameState{
         deck: %Blackjex.Game.Deck{
-          cards: [
-            %Card{rank: "King", suit: "Club"},
-            %Card{rank: "ACE", suit: "Spade"}
-          ]
+          cards: cards
         },
         player: %Player{
           name: "test",
@@ -145,7 +167,7 @@ defmodule Blackjex.GameStateTest do
 
       assert result.player.score == 0
       assert result.player.hand == []
-      assert length(result.deck.cards) == @deck_size
+      assert length(result.deck.cards) == length(cards)
     end
   end
 
@@ -171,13 +193,15 @@ defmodule Blackjex.GameStateTest do
     end
 
     test "resets game when round is lost" do
+      cards = [
+        %Card{rank: "King", suit: "Club"},
+        %Card{rank: "King", suit: "Spade"},
+        %Card{rank: "King", suit: "Hearts"}
+      ]
+
       game = %GameState{
         deck: %Blackjex.Game.Deck{
-          cards: [
-            %Card{rank: "King", suit: "Club"},
-            %Card{rank: "King", suit: "Spade"},
-            %Card{rank: "King", suit: "Hearts"}
-          ]
+          cards: cards
         },
         player: %Player{
           name: "test",
@@ -194,18 +218,20 @@ defmodule Blackjex.GameStateTest do
 
       assert result.player.score == 0
       assert result.player.hand == []
-      assert length(result.deck.cards) == @deck_size
+      assert length(result.deck.cards) == length(cards)
       assert _rounds = [%Round{loss: true}]
     end
 
     test "resets game when max score is hit" do
+      cards = [
+        %Card{rank: "King", suit: "Club"},
+        %Card{rank: "9", suit: "Spade"},
+        %Card{rank: "2", suit: "Hearts"}
+      ]
+
       game = %GameState{
         deck: %Blackjex.Game.Deck{
-          cards: [
-            %Card{rank: "King", suit: "Club"},
-            %Card{rank: "9", suit: "Spade"},
-            %Card{rank: "2", suit: "Hearts"}
-          ]
+          cards: cards
         },
         player: %Player{
           name: "test",
@@ -222,7 +248,7 @@ defmodule Blackjex.GameStateTest do
 
       assert result.player.score == 0
       assert result.player.hand == []
-      assert length(result.deck.cards) == @deck_size
+      assert length(result.deck.cards) == length(cards)
       assert _rounds = [%Round{loss: false, score: 21}]
     end
   end
