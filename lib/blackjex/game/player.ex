@@ -1,7 +1,7 @@
 defmodule Blackjex.Game.Player do
   alias Blackjex.Game.Helpers.Value
 
-  defstruct [:name, actions: [], hand: [], score: 0]
+  defstruct [:name, hand: [], score: 0]
 
   def receive_card(player = %__MODULE__{hand: hand}, card) do
     new_hand = hand ++ [card]
@@ -19,5 +19,4 @@ defmodule Blackjex.Game.Player do
   def reset_score(player) do
     %{player | score: 0}
   end
-
 end
