@@ -1,5 +1,5 @@
 defmodule Blackjex.Client.Prompt do
-  alias Blackjex.Client.Client
+  alias Blackjex.Client.{Client, View}
 
   @options [
     {
@@ -21,6 +21,7 @@ defmodule Blackjex.Client.Prompt do
 
     Client.call(sid, {:join, name})
     |> IO.inspect()
+    |> View.render()
   end
 
   def play_game(sid) when is_atom(sid) do
@@ -33,6 +34,7 @@ defmodule Blackjex.Client.Prompt do
 
     Client.call(sid, {answer})
     |> IO.inspect()
+    |> View.render()
 
     ask_for_input(sid)
   end

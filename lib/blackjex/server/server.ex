@@ -44,10 +44,10 @@ defmodule Blackjex.Server.Server do
     new_game_id = GameId.id_from_pid(from)
 
     with {:ok, state} <- ServerState.new_game(state, new_game_id, player_name) do
-      {:reply, {"Welcome #{player_name}!", new_game_id}, state}
+      {:reply, {:join, "Welcome #{player_name}!"}, state}
     else
       {:error, _, "game already exists"} ->
-        {:reply, "You area already in a game", state}
+        {:reply, already_in_game_message(), state}
     end
   end
 
@@ -56,10 +56,10 @@ defmodule Blackjex.Server.Server do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state} <- ServerState.hit(state, game_id) do
-      {:reply, {state, "Hit!"}, state}
+      {:reply, {:hit, state}, state}
     else
       {:error, :no_game, _message} ->
-        {:reply, "You are not in a game, please join first", state}
+        {:reply, no_game_message(), state}
     end
   end
 
@@ -68,10 +68,10 @@ defmodule Blackjex.Server.Server do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state} <- ServerState.stick(state, game_id) do
-      {:reply, {state, "Stick!"}, state}
+      {:reply, {:stick, state}, state}
     else
       {:error, :no_game, _message} ->
-        {:reply, "You are not in a game, please join first", state}
+        {:reply, no_game_message(), state}
     end
   end
 
@@ -79,10 +79,18 @@ defmodule Blackjex.Server.Server do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state, player} <- ServerState.cards(state, game_id) do
-      {:reply, player, state}
+      {:reply, {:cards, player}, state}
     else
       {:error, :no_game, _message} ->
-        {:reply, "You are not in a game, please join first", state}
+        {:reply, no_game_message(), state}
     end
+  end
+
+  defp already_in_game_message() do
+    {:already_joined, "You are already in a game"}
+  end
+
+  defp no_game_message() do
+    {:no_game, "You are not in a game, please join first"}
   end
 end
