@@ -31,13 +31,13 @@ defmodule Blackjex.Game.Deck do
   ## Examples
 
       iex> deck = Blackjex.Game.Deck.new_deck()
-      iex> is_list(deck) && length(deck) == (4 * 12)
+      iex> is_list(deck.cards) && length(deck.cards) == (4 * 12)
       true
 
   """
 
   def new_deck() do
-    @suits
+    cards = @suits
     |> Enum.flat_map(fn suit ->
       @value_map
       |> Map.keys()
@@ -46,5 +46,27 @@ defmodule Blackjex.Game.Deck do
       end)
     end)
     |> Enum.shuffle()
+
+    %__MODULE__{cards: cards}
+  end
+
+  @doc ~S"""
+  Take card from top of the deck
+
+  ## Examples
+
+      iex> %Blackjex.Game.Deck{cards: [
+      ...>  %Card{rank: "ACE", suit: "Club"},
+      ...>  %Card{rank: "ACE", suit: "Spade"},
+      ...>  %Card{rank: "ACE", suit: "Diamond"}
+      ...> ]} |> Blackjex.Game.Deck.take_card()
+      {:ok, %Card{rank: "ACE", suit: "Club"}, %Blackjex.Game.Deck{cards: [%Card{rank: "ACE", suit: "Spade"}, %Card{rank: "ACE", suit: "Diamond"}]}}
+
+  """
+  def take_card(deck) do
+    {card, new_cards} = List.pop_at(deck.cards, 0)
+    new_deck = %{deck | cards: new_cards}
+
+    {:ok, card, new_deck}
   end
 end
