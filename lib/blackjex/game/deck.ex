@@ -77,6 +77,9 @@ defmodule Blackjex.Game.Deck do
     {:ok, card, new_deck}
   end
 
+  @doc """
+    Not sure if the recycled cards should be re-shuffled
+  """
   def put_cards_back(deck = %__MODULE__{cards: cards}, cards_to_put) when is_list(cards_to_put) do
     cards = cards ++ cards_to_put
 
