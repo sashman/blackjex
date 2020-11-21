@@ -25,6 +25,10 @@ defmodule Blackjex.Server.Server do
     GenServer.call(__MODULE__, {:hit})
   end
 
+  def stick() do
+    GenServer.call(__MODULE__, {:stick})
+  end
+
   @impl true
   def handle_call({:show_state}, _from, state) do
     {:reply, state, state}
@@ -48,6 +52,18 @@ defmodule Blackjex.Server.Server do
 
     with {:ok, state} <- ServerState.hit(state, game_id) do
       {:reply, {state, "Hit!"}, state}
+    else
+      {:error, :no_game, _message} ->
+        {:reply, "You are not in a game, please join first", state}
+    end
+  end
+
+  @impl true
+  def handle_call({:stick}, from, state) do
+    game_id = GameId.id_from_pid(from)
+
+    with {:ok, state} <- ServerState.stick(state, game_id) do
+      {:reply, {state, "Stick!"}, state}
     else
       {:error, :no_game, _message} ->
         {:reply, "You are not in a game, please join first", state}
