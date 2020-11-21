@@ -4,6 +4,9 @@ defmodule Mix.Tasks.Play do
 
   def run([sid, cookie]) do
     IO.puts("Welcome to Blackjex Blackjack!")
+
+    sid = String.to_atom(sid)
+
     Client.connet(sid, cookie)
     Prompt.join_game(sid)
 

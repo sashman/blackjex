@@ -1,13 +1,11 @@
 defmodule Blackjex.Client.Client do
-  def connet(sid, cookie) do
+  def connet(sid, cookie) when is_atom(sid) do
     {:ok, _} = Node.start(:client)
-
-    sid = String.to_atom(sid)
     Node.set_cookie(String.to_atom(cookie))
     Node.connect(sid)
   end
 
-  def call(sid, command) do
+  def call(sid, command) when is_atom(sid) do
     GenServer.call({Blackjex.Server.Server, sid}, command)
   end
 end
