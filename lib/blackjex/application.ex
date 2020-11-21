@@ -10,6 +10,7 @@ defmodule Blackjex.Application do
     children = [
       # Starts a worker by calling: Blackjex.Worker.start_link(arg)
       # {Blackjex.Worker, arg}
+      {Blackjex.Server.Server, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
