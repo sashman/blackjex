@@ -25,6 +25,17 @@ defmodule Blackjex.Game.Deck do
     "King" => 10
   }
 
+  @doc ~S"""
+  Create a shuffled list of cards of suit(4) x rank(12) number of cards
+
+  ## Examples
+
+      iex> deck = Blackjex.Game.Deck.new_deck()
+      iex> is_list(deck) && length(deck) == (4 * 12)
+      true
+
+  """
+
   def new_deck() do
     @suits
     |> Enum.flat_map(fn suit ->
