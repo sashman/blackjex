@@ -60,7 +60,7 @@ defmodule Blackjex.Game.GameState do
     %{game_state | player: new_player, deck: new_deck}
   end
 
-  def player_hand(game_state) do
-    game_state.player.hand
+  def show_player(game_state) do
+    game_state.player
   end
 end
