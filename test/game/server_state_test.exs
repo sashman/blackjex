@@ -13,5 +13,13 @@ defmodule Blackjex.ServerStateTest do
       _games = server.game_states
       assert _games = %{"my-game" => %Blackjex.Game.GameState{}}
     end
+
+    test "given an id of an existing game, returns an error" do
+      {:ok, server} =
+        ServerState.init()
+        |> ServerState.new_game("my-game")
+
+      assert {:error, "my-game", "game already exists"} == ServerState.new_game(server, "my-game")
+    end
   end
 end
