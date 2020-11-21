@@ -42,15 +42,25 @@ defmodule Blackjex.Client.View do
     cards = data.hand
     IO.puts(@border)
     render_cards(cards)
+    IO.puts("Your score is: #{data.score}")
     IO.puts(@border)
   end
 
+  defp render_cards([]) do
+    IO.puts("Your hand is empty")
+  end
+
   defp render_cards(cards) do
+    IO.write("|")
+
     cards
     |> Enum.map(fn %Card{rank: rank, suit: suit} ->
-      "#{@rank_map[rank]} #{@suit_unicode_map[suit]}\n"
+      "#{@rank_map[rank]}#{@suit_unicode_map[suit]}"
     end)
-    |> IO.puts()
+    |> Enum.join("|")
+    |> IO.write()
+
+    IO.puts("|")
   end
 
   def render({view, _data}) do
