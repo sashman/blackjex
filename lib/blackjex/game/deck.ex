@@ -75,4 +75,8 @@ defmodule Blackjex.Game.Deck do
 
     {:ok, card, new_deck}
   end
+
+  def card_value(card = %Card{}) do
+    @value_map[card.rank]
+  end
 end
