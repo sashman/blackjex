@@ -41,7 +41,7 @@ defmodule Blackjex.Helpers.WinConditionTest do
       game = GameState.hit(game)
       game = GameState.hit(game)
 
-      assert {:loss, 30, _} = WinCondition.round_over?(game)
+      assert {:loss} = WinCondition.round_over?(game)
     end
   end
 end
