@@ -22,8 +22,16 @@ defmodule Blackjex.Game.ServerState do
   ## Examples
 
       iex> server = Blackjex.Game.ServerState.init()
-      iex> server = Blackjex.Game.ServerState.new_game(server, "new-game")
-      iex> with {:ok, %Blackjex.Game.ServerState{}} <- server, do: :passed
+      iex> result = Blackjex.Game.ServerState.new_game(server, "new-game")
+      iex> with {:ok, %Blackjex.Game.ServerState{}} <- result, do: :passed
+      :passed
+
+  ## Examples
+
+      iex> server = Blackjex.Game.ServerState.init()
+      iex> {:ok, server} = Blackjex.Game.ServerState.new_game(server, "new-game")
+      iex> result = Blackjex.Game.ServerState.new_game(server, "new-game")
+      iex> with {:error, "new-game", "game already exists"} <- result, do: :passed
       :passed
 
   """
