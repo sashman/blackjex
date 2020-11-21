@@ -1,8 +1,6 @@
 defmodule Blackjex.Game.ServerState do
   alias Blackjex.Game.GameState
 
-  alias Blackjex.Game.Helpers.WinCondition
-
   defstruct game_states: %{}
 
   @doc ~S"""
@@ -58,13 +56,7 @@ defmodule Blackjex.Game.ServerState do
     game_state =
       server_state.game_states[game_id]
       |> GameState.hit()
-
-    game_state
-    |> WinCondition.round_over?()
-    |> case do
-      {:loss, _, _} -> GameState.round_lost(game_state)
-      _ -> game_state
-    end
+      |> GameState.apply_win_condition()
 
     {:ok, server_state |> update_game_state(game_id, game_state)}
   end

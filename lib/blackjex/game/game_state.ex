@@ -1,5 +1,6 @@
 defmodule Blackjex.Game.GameState do
   alias Blackjex.Game.{Deck, Player, Round}
+  alias Blackjex.Game.Helpers.WinCondition
 
   defstruct [:deck, :player, rounds: []]
 
@@ -35,6 +36,15 @@ defmodule Blackjex.Game.GameState do
     new_player = Player.receive_card(player, card)
 
     %{game_state | deck: new_deck, player: new_player}
+  end
+
+  def apply_win_condition(game_state) do
+    game_state
+    |> WinCondition.round_over?()
+    |> case do
+      {:loss, _, _} -> round_lost(game_state)
+      _ -> game_state
+    end
   end
 
   def round_lost(game_state = %__MODULE__{}) do

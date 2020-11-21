@@ -148,4 +148,54 @@ defmodule Blackjex.GameStateTest do
       assert length(result.deck.cards) == @deck_size
     end
   end
+
+  describe ".apply_win_condition" do
+    test "does not reset game when no loss" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "ACE", suit: "Spade"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      result = GameState.apply_win_condition(game)
+
+      assert result.rounds == []
+    end
+
+    test "resets game when round is lost" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "King", suit: "Spade"},
+            %Card{rank: "King", suit: "Hearts"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      game = GameState.hit(game)
+      game = GameState.hit(game)
+      result = GameState.apply_win_condition(game)
+
+      _rounds = result.rounds
+
+      assert result.player.score == 0
+      assert result.player.hand == []
+      assert length(result.deck.cards) == @deck_size
+      assert _rounds = [%Round{loss: true}]
+    end
+  end
 end
