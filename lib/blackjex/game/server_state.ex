@@ -65,6 +65,8 @@ defmodule Blackjex.Game.ServerState do
       {:loss, _, _} -> GameState.round_lost(game_state)
       _ -> game_state
     end
+
+    {:ok, server_state |> update_game_state(game_id, game_state)}
   end
 
   def stick(server_state = %__MODULE__{}, game_id) do
@@ -75,5 +77,13 @@ defmodule Blackjex.Game.ServerState do
   def cards(server_state = %__MODULE__{}, game_id) do
     server_state.game_states[game_id]
     |> GameState.show_player()
+  end
+
+  defp update_game_state(server_state = %__MODULE__{}, game_id, game_state) do
+    game_states =
+      server_state.game_states
+      |> Map.put(game_id, game_state)
+
+    %{server_state | game_states: game_states}
   end
 end

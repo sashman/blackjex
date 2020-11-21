@@ -22,4 +22,21 @@ defmodule Blackjex.ServerStateTest do
       assert {:error, "my-game", "game already exists"} == ServerState.new_game(server, "my-game")
     end
   end
+
+  describe ".hit" do
+    test "given an id calls the hit action on the game" do
+      gid = "test-game"
+
+      {:ok, server} =
+        ServerState.init()
+        |> ServerState.new_game(gid)
+
+      {:ok, server} =
+        server
+        |> ServerState.hit(gid)
+
+      games = server.game_states
+      assert length(games[gid].player.hand) == 1
+    end
+  end
 end
