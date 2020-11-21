@@ -39,13 +39,19 @@ defmodule Blackjex.Game.ServerState do
   """
   def new_game(server_state = %__MODULE__{}, game_id, player_name \\ nil) do
     cond do
-      Map.has_key?(server_state, game_id) ->
+      Map.has_key?(server_state.game_states, game_id) ->
         {:error, game_id, "game already exists"}
 
       true ->
-        game = GameState.init(player_name)
-        {:ok, Map.put(server_state, game_id, game)}
+        {:ok, create_new_game(server_state, player_name, game_id)}
     end
+  end
+
+  defp create_new_game(server_state = %__MODULE__{game_states: game_states}, player_name, game_id) do
+    game = GameState.init(player_name)
+
+    game_states = Map.put(game_states, game_id, game)
+    %{server_state | game_states: game_states}
   end
 
   def hit(server_state = %__MODULE__{}, game_id) do
