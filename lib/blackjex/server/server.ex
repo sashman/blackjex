@@ -2,6 +2,7 @@ defmodule Blackjex.Server.Server do
   use GenServer
   alias Blackjex.Game.ServerState
   alias Blackjex.Server.Helpers.GameId
+  require Logger
 
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
