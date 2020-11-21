@@ -74,7 +74,6 @@ defmodule Blackjex.Client.View do
   end
 
   def render({:stick, data}) do
-    cards = data.player.hand
     IO.puts(@border)
     IO.puts("New round")
     IO.puts(@border)
