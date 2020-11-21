@@ -37,17 +37,28 @@ defmodule Blackjex.Game.GameState do
     %{game_state | deck: new_deck, player: new_player}
   end
 
+  def round_lost(game_state = %__MODULE__{}) do
+    game_state
+    |> record_round(:loss)
+    |> reset_for_new_round()
+  end
+
   def stick(game_state = %__MODULE__{}) do
     game_state
     |> record_round()
     |> reset_for_new_round()
   end
 
-  def record_round(game_state = %__MODULE__{rounds: rounds, player: player}) do
+  def record_round(game_state = %__MODULE__{rounds: rounds, player: player}, loss \\ :no_loss) do
     %Player{score: score, hand: hand} = player
-    new_rounds = rounds ++ [%Round{score: score, hand: hand}]
+    new_rounds = new_rounds(rounds, score, hand, loss)
     %{game_state | rounds: new_rounds}
   end
+
+  defp new_rounds(rounds, score, hand, :loss),
+    do: rounds ++ [%Round{score: score, hand: hand, loss: true}]
+
+  defp new_rounds(rounds, score, hand, _), do: rounds ++ [%Round{score: score, hand: hand}]
 
   def reset_for_new_round(game_state = %__MODULE__{player: player}) do
     new_deck = Deck.new_deck()

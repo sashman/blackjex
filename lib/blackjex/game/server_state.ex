@@ -1,6 +1,8 @@
 defmodule Blackjex.Game.ServerState do
   alias Blackjex.Game.GameState
 
+  alias Blackjex.Game.Helpers.WinCondition
+
   defstruct game_states: %{}
 
   @doc ~S"""
@@ -37,10 +39,35 @@ defmodule Blackjex.Game.ServerState do
   """
   def new_game(server_state = %__MODULE__{}, game_id, player_name \\ nil) do
     cond do
-      Map.has_key?(server_state, game_id) -> {:error, game_id, "game already exists"}
-      true -> game = GameState.init(player_name)
+      Map.has_key?(server_state, game_id) ->
+        {:error, game_id, "game already exists"}
+
+      true ->
+        game = GameState.init(player_name)
         {:ok, Map.put(server_state, game_id, game)}
     end
   end
 
+  def hit(server_state = %__MODULE__{}, game_id) do
+    game_state =
+      server_state.game_states[game_id]
+      |> GameState.hit()
+
+    game_state
+    |> WinCondition.round_over?()
+    |> case do
+      {:loss, _, _} -> GameState.round_lost(game_state)
+      _ -> game_state
+    end
+  end
+
+  def stick(server_state = %__MODULE__{}, game_id) do
+    server_state.game_states[game_id]
+    |> GameState.stick()
+  end
+
+  def cards(server_state = %__MODULE__{}, game_id) do
+    server_state.game_states[game_id]
+    |> GameState.show_player()
+  end
 end

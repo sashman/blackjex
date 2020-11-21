@@ -68,7 +68,60 @@ defmodule Blackjex.GameStateTest do
                  score: 10,
                  hand: [
                    %Card{rank: "King", suit: "Club"}
-                 ]
+                 ],
+                 loss: false
+               }
+             ]
+    end
+
+    test "resets deck and player hand and score" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "ACE", suit: "Spade"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      result = GameState.stick(game)
+
+      assert result.player.score == 0
+      assert result.player.hand == []
+      assert length(result.deck.cards) == @deck_size
+    end
+  end
+
+  describe ".round_lost" do
+    test "records round results" do
+      game = %GameState{
+        deck: %Blackjex.Game.Deck{
+          cards: [
+            %Card{rank: "King", suit: "Club"},
+            %Card{rank: "ACE", suit: "Spade"}
+          ]
+        },
+        player: %Player{
+          name: "test",
+          hand: []
+        }
+      }
+
+      game = GameState.hit(game)
+      result = GameState.round_lost(game)
+
+      assert result.rounds == [
+               %Round{
+                 score: 10,
+                 hand: [
+                   %Card{rank: "King", suit: "Club"}
+                 ],
+                 loss: true
                }
              ]
     end

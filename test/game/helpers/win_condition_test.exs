@@ -19,7 +19,7 @@ defmodule Blackjex.Helpers.WinConditionTest do
       }
 
       result = GameState.hit(game)
-      assert WinCondition.round_over?(game) == {:no_round_over}
+      assert WinCondition.round_over?(result) == {:no_round_over}
     end
 
     test "round is over when the player is over the score limit" do
@@ -41,7 +41,7 @@ defmodule Blackjex.Helpers.WinConditionTest do
       game = GameState.hit(game)
       game = GameState.hit(game)
 
-      assert WinCondition.round_over?(game) = {:loss, 30, _}
+      assert {:loss, 30, _} = WinCondition.round_over?(game)
     end
   end
 end
