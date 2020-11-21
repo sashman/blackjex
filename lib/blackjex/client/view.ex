@@ -24,10 +24,10 @@ defmodule Blackjex.Client.View do
     "King" => "E"
   }
 
-  @spec render({any, any}) :: any
   def render({:join, data}) do
     IO.puts(@border)
     IO.puts(data)
+    IO.puts("You have no cards, hit to get some!")
     IO.puts(@border)
   end
 
@@ -46,6 +46,18 @@ defmodule Blackjex.Client.View do
     IO.puts(@border)
   end
 
+  def render({:hit, data}) do
+    cards = data.player.hand
+    IO.puts(@border)
+    render_cards(cards)
+    IO.puts("Your score is: #{data.player.score}")
+    IO.puts(@border)
+  end
+
+  def render({view, _data}) do
+    IO.inspect(view, label: "rendering")
+  end
+
   defp render_cards([]) do
     IO.puts("Your hand is empty")
   end
@@ -61,9 +73,5 @@ defmodule Blackjex.Client.View do
     |> IO.write()
 
     IO.puts("|")
-  end
-
-  def render({view, _data}) do
-    IO.inspect(view, label: "rendering")
   end
 end

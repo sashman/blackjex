@@ -56,7 +56,7 @@ defmodule Blackjex.Server.Server do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state} <- ServerState.hit(state, game_id) do
-      {:reply, {:hit, state}, state}
+      {:reply, {:hit, get_players_game(state, game_id)}, state}
     else
       {:error, :no_game, _message} ->
         {:reply, no_game_message(), state}
@@ -68,7 +68,7 @@ defmodule Blackjex.Server.Server do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state} <- ServerState.stick(state, game_id) do
-      {:reply, {:stick, state}, state}
+      {:reply, {:stick, get_players_game(state, game_id)}, state}
     else
       {:error, :no_game, _message} ->
         {:reply, no_game_message(), state}
@@ -85,6 +85,8 @@ defmodule Blackjex.Server.Server do
         {:reply, no_game_message(), state}
     end
   end
+
+  defp get_players_game(state, game_id), do: state.game_states[game_id]
 
   defp already_in_game_message() do
     {:already_joined, "You are already in a game"}
