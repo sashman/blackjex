@@ -51,7 +51,6 @@ defmodule Blackjex.Game.Deck do
   end
 
 
-  @spec take_card(%{cards: [any]}) :: {:error, <<_::144>>} | {:ok, any, %{cards: [any]}}
   @doc ~S"""
   Take card from top of the deck, errors if no more cards are left
 

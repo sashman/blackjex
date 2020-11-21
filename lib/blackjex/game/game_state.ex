@@ -24,4 +24,16 @@ defmodule Blackjex.Game.GameState do
     }
   end
 
+  @doc ~S"""
+  Get a card from the deck and give it to the player
+  """
+  def hit(game_state = %__MODULE__{deck: deck, player: player}) do
+    {:ok, card, new_deck} = deck
+      |> Deck.take_card()
+
+    new_player =  Player.receive_card(player, card)
+
+    %{game_state | deck: new_deck, player: new_player}
+  end
+
 end
