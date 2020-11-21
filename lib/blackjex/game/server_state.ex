@@ -70,11 +70,11 @@ defmodule Blackjex.Game.ServerState do
   end
 
   def cards(server_state = %__MODULE__{}, game_id) do
-    game_state =
+    player =
       server_state.game_states[game_id]
       |> GameState.show_player()
 
-    {:ok, server_state |> update_game_state(game_id, game_state)}
+    {:ok, server_state, player}
   end
 
   defp update_game_state(server_state = %__MODULE__{}, game_id, game_state) do
