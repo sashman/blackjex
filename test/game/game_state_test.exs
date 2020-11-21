@@ -187,7 +187,7 @@ defmodule Blackjex.GameStateTest do
       }
 
       game = GameState.hit(game)
-      result = GameState.apply_win_condition(game)
+      {:continue, result} = GameState.apply_win_condition(game)
 
       assert result.rounds == []
     end
@@ -212,7 +212,7 @@ defmodule Blackjex.GameStateTest do
       game = GameState.hit(game)
       game = GameState.hit(game)
       game = GameState.hit(game)
-      result = GameState.apply_win_condition(game)
+      {:loss, result} = GameState.apply_win_condition(game)
 
       _rounds = result.rounds
 
@@ -242,7 +242,7 @@ defmodule Blackjex.GameStateTest do
       game = GameState.hit(game)
       game = GameState.hit(game)
       game = GameState.hit(game)
-      result = GameState.apply_win_condition(game)
+      {:max_score, result} = GameState.apply_win_condition(game)
 
       _rounds = result.rounds
 

@@ -57,12 +57,12 @@ defmodule Blackjex.Game.ServerState do
       server_state,
       game_id,
       fn ->
-        game_state =
+        {resolution, game_state} =
           server_state.game_states[game_id]
           |> GameState.hit()
           |> GameState.apply_win_condition()
 
-        {:ok, server_state |> update_game_state(game_id, game_state)}
+        {:ok, server_state |> update_game_state(game_id, game_state), resolution}
       end
     )
   end

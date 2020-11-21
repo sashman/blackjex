@@ -31,12 +31,13 @@ defmodule Blackjex.ServerStateTest do
         ServerState.init()
         |> ServerState.new_game(gid)
 
-      {:ok, server} =
+      {:ok, server, resolution} =
         server
         |> ServerState.hit(gid)
 
       games = server.game_states
       assert length(games[gid].player.hand) == 1
+      assert resolution == :continue
     end
   end
 end

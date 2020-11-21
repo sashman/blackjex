@@ -55,8 +55,8 @@ defmodule Blackjex.Server.Server do
   def handle_call({:hit}, from, state) do
     game_id = GameId.id_from_pid(from)
 
-    with {:ok, state} <- ServerState.hit(state, game_id) do
-      {:reply, {:hit, get_players_game(state, game_id)}, state}
+    with {:ok, state, resolution} <- ServerState.hit(state, game_id) do
+      {:reply, {:hit, resolution, get_players_game(state, game_id)}, state}
     else
       {:error, :no_game, _message} ->
         {:reply, no_game_message(), state}
