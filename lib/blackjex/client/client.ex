@@ -1,10 +1,12 @@
 defmodule Blackjex.Client.Client do
   def connect(sid, cookie, player_name) when is_atom(sid) do
+    {:ok, hostname} = :inet.gethostname()
+
     {:ok, _} =
-      player_name
+      "#{player_name}@#{hostname}"
       |> String.replace(~r/[\/:]/, "_")
       |> String.to_atom()
-      |> Node.start()
+      |> Node.start(:shortnames)
 
     Node.set_cookie(String.to_atom(cookie))
     Node.connect(sid)

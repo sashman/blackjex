@@ -1,0 +1,11 @@
+FROM elixir:1.11.2
+
+RUN mix local.hex --force && \
+  mix local.rebar --force
+
+COPY . .
+
+RUN mix deps.get && mix compile
+RUN epmd -daemon
+
+CMD [ "sh", "-c", "epmd -daemon && mix play server@server some-cookie-name" ]

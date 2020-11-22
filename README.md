@@ -31,6 +31,26 @@ Play with:
 mix play server@127.0.0.1 some-cookie-name
 ```
 
+### Docker
+
+Start server:
+
+```
+docker-compose up
+```
+
+Build client:
+
+```
+docker build -t blackjex-client -f Dockerfile.client .
+```
+
+Run client:
+
+```
+docker run -it --network=blackjex_default --link server blackjex-client
+```
+
 ## Approach
 
 I began by implementing the `GameState` module while lead to a very smooth functional implementation. I consciously avoided thinking about GenServer part of the implementation which allowed for easy testing of state and game logic. The `GameState` was further wrapped in a `ServerState` which was created to server at top level state to be used by the GenServer.
@@ -57,3 +77,4 @@ Given time to improve, I would tackle the following areas:
   - Push the command interface into the server itself, so the client can call a clean `Server.join(...)`, `Server.join()`, etc calls.
 - Some refactoring of constants in the Game module, e.g. score limit of 21 is spread through out a few modules.
 - Try including the server into a Phoenix app and see if it could be integrated via Endpoint and enable HTTP clients.
+- For the docker solution explore a better approach than starting `epmd` manually on the client side.
