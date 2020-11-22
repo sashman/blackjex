@@ -13,4 +13,6 @@ defmodule Mix.Tasks.Play do
 
     Prompt.play_game(sid)
   end
+
+  def run(_), do: IO.puts("Usage: mix play <SERVER_ID> <COOKIE>")
 end
