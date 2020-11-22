@@ -14,6 +14,11 @@ defmodule Blackjex.Game.Stats do
       %Blackjex.Game.Stats{average: 0, limit_score_count: 0, max: 0}
 
       iex> %GameState{rounds: [
+      ...>  %Round{loss: true, score: 1, hand: []}
+      ...> ]} |> Blackjex.Game.Stats.stats
+      %Blackjex.Game.Stats{average: 0, limit_score_count: 0, max: 0}
+
+      iex> %GameState{rounds: [
       ...>  %Round{loss: false, score: 1, hand: []}
       ...> ]} |> Blackjex.Game.Stats.stats
       %Blackjex.Game.Stats{average: 1.0, limit_score_count: 0, max: 1}
@@ -40,12 +45,12 @@ defmodule Blackjex.Game.Stats do
     no_loss_rounds_score_total =
       no_loss_rounds |> Stream.map(fn %Round{score: score} -> score end) |> Enum.sum()
 
-    average = no_loss_rounds_score_total / length(no_loss_rounds)
+    average = average(no_loss_rounds_score_total, no_loss_rounds)
 
     max =
       no_loss_rounds
       |> Stream.map(fn %Round{score: score} -> score end)
-      |> Enum.max()
+      |> Enum.max(&>=/2, fn -> 0 end)
 
     limit_score_count =
       no_loss_rounds
@@ -57,4 +62,10 @@ defmodule Blackjex.Game.Stats do
 
     %__MODULE__{average: average, max: max, limit_score_count: limit_score_count}
   end
+
+  defp average(_, []),
+    do: 0
+
+  defp average(no_loss_rounds_score_total, no_loss_rounds),
+    do: no_loss_rounds_score_total / length(no_loss_rounds)
 end
