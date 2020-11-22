@@ -16,9 +16,11 @@ defmodule Blackjex.Client.Prompt do
     }
   ]
 
-  def join_game(sid) when is_atom(sid) do
-    name = ExPrompt.string("What is your name? ")
+  def ask_for_name() do
+    ExPrompt.string_required("What is your name? ")
+  end
 
+  def join_game(sid, name) when is_atom(sid) do
     Client.call(sid, {:join, name})
     |> View.render()
   end

@@ -33,7 +33,7 @@ defmodule Blackjex.Client.View do
 
   def render({:already_joined, data}) do
     IO.puts(@border)
-    IO.puts(data)
+    IO.puts("Welcome back!")
     IO.puts("Check your hand!")
     IO.puts(@border)
   end
@@ -73,7 +73,7 @@ defmodule Blackjex.Client.View do
     IO.puts(@border)
   end
 
-  def render({:stick, data}) do
+  def render({:stick, _}) do
     IO.puts(@border)
     IO.puts("New round")
     IO.puts(@border)

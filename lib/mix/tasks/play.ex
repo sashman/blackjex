@@ -7,8 +7,9 @@ defmodule Mix.Tasks.Play do
 
     sid = String.to_atom(sid)
 
-    Client.connet(sid, cookie)
-    Prompt.join_game(sid)
+    name = Prompt.ask_for_name()
+    Client.connect(sid, cookie, name)
+    Prompt.join_game(sid, name)
 
     Prompt.play_game(sid)
   end
