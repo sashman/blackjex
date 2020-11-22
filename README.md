@@ -78,3 +78,4 @@ Given time to improve, I would tackle the following areas:
 - Some refactoring of constants in the Game module, e.g. score limit of 21 is spread through out a few modules.
 - Try including the server into a Phoenix app and see if it could be integrated via Endpoint and enable HTTP clients.
 - For the docker solution explore a better approach than starting `epmd` manually on the client side.
+- Logging on the server side for service transparency
