@@ -11,7 +11,7 @@ defmodule Blackjex.Game.Deck do
   ]
 
   @value_map %{
-    "ACE" => 1,
+    "ACE" => {1, 11},
     "2" => 2,
     "3" => 3,
     "4" => 4,
