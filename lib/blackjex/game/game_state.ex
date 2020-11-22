@@ -43,7 +43,7 @@ defmodule Blackjex.Game.GameState do
     |> WinCondition.round_over?()
     |> case do
       {:loss} -> {:loss, round_lost(game_state)}
-      {:max_score} -> {:max_score, game_state |> record_round() |> reset_for_new_round()}
+      {:max_score} -> {:max_score, game_state |> record_round(:no_loss) |> reset_for_new_round()}
       {_} -> {:continue, game_state}
     end
   end
@@ -56,11 +56,12 @@ defmodule Blackjex.Game.GameState do
 
   def stick(game_state = %__MODULE__{}) do
     game_state
-    |> record_round()
+    |> record_round(:no_loss)
     |> reset_for_new_round()
   end
 
-  def record_round(game_state = %__MODULE__{rounds: rounds, player: player}, loss \\ :no_loss) do
+  def record_round(game_state = %__MODULE__{rounds: rounds, player: player}, loss)
+      when loss in [:loss, :no_loss] do
     %Player{score: score, hand: hand} = player
     new_rounds = new_rounds(rounds, score, hand, loss)
     %{game_state | rounds: new_rounds}
@@ -69,7 +70,8 @@ defmodule Blackjex.Game.GameState do
   defp new_rounds(rounds, score, hand, :loss),
     do: rounds ++ [%Round{score: score, hand: hand, loss: true}]
 
-  defp new_rounds(rounds, score, hand, _), do: rounds ++ [%Round{score: score, hand: hand}]
+  defp new_rounds(rounds, score, hand, _),
+    do: rounds ++ [%Round{score: score, hand: hand}]
 
   def reset_for_new_round(game_state = %__MODULE__{player: player, deck: deck}) do
     new_deck = Deck.put_cards_back(deck, player.hand)
