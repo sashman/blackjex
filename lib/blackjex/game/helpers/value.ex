@@ -1,5 +1,5 @@
 defmodule Blackjex.Game.Helpers.Value do
-  alias Blackjex.Game.{Player, Deck, Card}
+  alias Blackjex.Game.{Player, Deck}
 
   @doc ~S"""
   Calculate player hand score

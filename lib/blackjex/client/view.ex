@@ -91,7 +91,7 @@ defmodule Blackjex.Client.View do
     end)
   end
 
-  def render({view, data}) do
+  def render({view, _data}) do
     IO.inspect(view, label: "rendering")
   end
 
@@ -101,12 +101,6 @@ defmodule Blackjex.Client.View do
 
   defp render_cards([]) do
     IO.puts("Your hand is empty")
-  end
-
-  defp border(fun) when is_function(fun) do
-    IO.puts(@border)
-    fun.()
-    IO.puts(@border)
   end
 
   defp render_cards(cards) do
@@ -120,5 +114,11 @@ defmodule Blackjex.Client.View do
     |> IO.write()
 
     IO.puts("|")
+  end
+
+  defp border(fun) when is_function(fun) do
+    IO.puts(@border)
+    fun.()
+    IO.puts(@border)
   end
 end
