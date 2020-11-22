@@ -60,6 +60,9 @@ defmodule Blackjex.Game.GameState do
     |> reset_for_new_round()
   end
 
+  def stats(game_state = %__MODULE__{}) do
+  end
+
   def record_round(game_state = %__MODULE__{rounds: rounds, player: player}, loss)
       when loss in [:loss, :no_loss] do
     %Player{score: score, hand: hand} = player

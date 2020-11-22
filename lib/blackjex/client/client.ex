@@ -11,6 +11,7 @@ defmodule Blackjex.Client.Client do
   end
 
   def call(sid, command) when is_atom(sid) do
+    # This can be changed to rely on the servers API to not have to look up using the sid
     GenServer.call({Blackjex.Server.Server, sid}, command)
   end
 end
