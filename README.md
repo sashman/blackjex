@@ -6,6 +6,12 @@ The game of blackjack is ran on a dedicated server and supports multiple players
 
 ## Usage
 
+Install deps:
+
+```
+mix deps.get
+```
+
 Run tests with:
 
 ```
