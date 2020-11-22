@@ -95,6 +95,20 @@ defmodule Blackjex.Game.ServerState do
     )
   end
 
+  def stats(server_state = %__MODULE__{}, game_id) do
+    guard_for_existing_game(
+      server_state,
+      game_id,
+      fn ->
+        stats =
+          server_state.game_states[game_id]
+          |> GameState.stats()
+
+        {:ok, server_state, stats}
+      end
+    )
+  end
+
   defp update_game_state(server_state = %__MODULE__{}, game_id, game_state) do
     game_states =
       server_state.game_states

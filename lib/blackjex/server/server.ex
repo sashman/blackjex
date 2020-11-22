@@ -34,6 +34,10 @@ defmodule Blackjex.Server.Server do
     GenServer.call(__MODULE__, {:cards})
   end
 
+  def stats() do
+    GenServer.call(__MODULE__, {:stats})
+  end
+
   @impl true
   def handle_call({:show_state}, _from, state) do
     {:reply, state, state}
@@ -75,11 +79,24 @@ defmodule Blackjex.Server.Server do
     end
   end
 
+  @impl true
   def handle_call({:cards}, from, state) do
     game_id = GameId.id_from_pid(from)
 
     with {:ok, state, player} <- ServerState.cards(state, game_id) do
       {:reply, {:cards, player}, state}
+    else
+      {:error, :no_game, _message} ->
+        {:reply, no_game_message(), state}
+    end
+  end
+
+  @impl true
+  def handle_call({:stats}, from, state) do
+    game_id = GameId.id_from_pid(from)
+
+    with {:ok, state, stats} <- ServerState.stats(state, game_id) do
+      {:reply, {:stats, stats}, state}
     else
       {:error, :no_game, _message} ->
         {:reply, no_game_message(), state}

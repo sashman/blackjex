@@ -1,6 +1,6 @@
 defmodule Blackjex.Game.GameState do
   alias Blackjex.Game.{Deck, Player, Round}
-  alias Blackjex.Game.Helpers.WinCondition
+  alias Blackjex.Game.Helpers.{WinCondition, Stats}
 
   defstruct [:deck, :player, rounds: []]
 
@@ -61,6 +61,8 @@ defmodule Blackjex.Game.GameState do
   end
 
   def stats(game_state = %__MODULE__{}) do
+    game_state
+    |> Stats.stats()
   end
 
   def record_round(game_state = %__MODULE__{rounds: rounds, player: player}, loss)

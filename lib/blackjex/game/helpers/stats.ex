@@ -9,6 +9,10 @@ defmodule Blackjex.Game.Helpers.Stats do
   ## Examples
 
       iex> %GameState{rounds: [
+      ...> ]} |> Blackjex.Game.Helpers.Stats.stats
+      %{avergage: 0, limit_score_count: 0, max: 0}
+
+      iex> %GameState{rounds: [
       ...>  %Round{loss: false, score: 1, hand: []}
       ...> ]} |> Blackjex.Game.Helpers.Stats.stats
       %{avergage: 1.0, limit_score_count: 0, max: 1}
@@ -21,6 +25,8 @@ defmodule Blackjex.Game.Helpers.Stats do
       %{avergage: 11.0, limit_score_count: 1, max: 21}
 
   """
+
+  def stats(%GameState{rounds: []}), do: %{avergage: 0, max: 0, limit_score_count: 0}
 
   def stats(%GameState{rounds: rounds}) do
     no_loss_rounds =

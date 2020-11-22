@@ -13,6 +13,10 @@ defmodule Blackjex.Client.Prompt do
     {
       "cards",
       :cards
+    },
+    {
+      "stats",
+      :stats
     }
   ]
 
