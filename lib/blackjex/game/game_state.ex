@@ -1,6 +1,6 @@
 defmodule Blackjex.Game.GameState do
-  alias Blackjex.Game.{Deck, Player, Round}
-  alias Blackjex.Game.Helpers.{WinCondition, Stats}
+  alias Blackjex.Game.{Deck, Player, Round, Stats}
+  alias Blackjex.Game.Helpers.{WinCondition}
 
   defstruct [:deck, :player, rounds: []]
 

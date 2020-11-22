@@ -1,4 +1,5 @@
-defmodule Blackjex.Game.Helpers.Stats do
+defmodule Blackjex.Game.Stats do
+  defstruct average: 0, limit_score_count: 0, max: 0
   alias Blackjex.Game.{GameState, Round}
 
   @score_limit 21
@@ -9,24 +10,24 @@ defmodule Blackjex.Game.Helpers.Stats do
   ## Examples
 
       iex> %GameState{rounds: [
-      ...> ]} |> Blackjex.Game.Helpers.Stats.stats
-      %{avergage: 0, limit_score_count: 0, max: 0}
+      ...> ]} |> Blackjex.Game.Stats.stats
+      %Blackjex.Game.Stats{average: 0, limit_score_count: 0, max: 0}
 
       iex> %GameState{rounds: [
       ...>  %Round{loss: false, score: 1, hand: []}
-      ...> ]} |> Blackjex.Game.Helpers.Stats.stats
-      %{avergage: 1.0, limit_score_count: 0, max: 1}
+      ...> ]} |> Blackjex.Game.Stats.stats
+      %Blackjex.Game.Stats{average: 1.0, limit_score_count: 0, max: 1}
 
       iex> %GameState{rounds: [
       ...>  %Round{loss: false, score: 1, hand: []},
       ...>  %Round{loss: false, score: 21, hand: []},
       ...>  %Round{loss: true, score: 28, hand: []}
-      ...> ]} |> Blackjex.Game.Helpers.Stats.stats
-      %{avergage: 11.0, limit_score_count: 1, max: 21}
+      ...> ]} |> Blackjex.Game.Stats.stats
+      %Blackjex.Game.Stats{average: 11.0, limit_score_count: 1, max: 21}
 
   """
 
-  def stats(%GameState{rounds: []}), do: %{avergage: 0, max: 0, limit_score_count: 0}
+  def stats(%GameState{rounds: []}), do: %__MODULE__{}
 
   def stats(%GameState{rounds: rounds}) do
     no_loss_rounds =
@@ -39,7 +40,7 @@ defmodule Blackjex.Game.Helpers.Stats do
     no_loss_rounds_score_total =
       no_loss_rounds |> Stream.map(fn %Round{score: score} -> score end) |> Enum.sum()
 
-    avergage = no_loss_rounds_score_total / length(no_loss_rounds)
+    average = no_loss_rounds_score_total / length(no_loss_rounds)
 
     max =
       no_loss_rounds
@@ -54,6 +55,6 @@ defmodule Blackjex.Game.Helpers.Stats do
       end)
       |> length()
 
-    %{avergage: avergage, max: max, limit_score_count: limit_score_count}
+    %__MODULE__{average: average, max: max, limit_score_count: limit_score_count}
   end
 end
