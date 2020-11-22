@@ -1,5 +1,5 @@
 defmodule Blackjex.Client.View do
-  alias Blackjex.Game.Card
+  alias Blackjex.Game.{Card, Stats}
 
   @border "===================="
   @suit_unicode_map %{
@@ -83,13 +83,15 @@ defmodule Blackjex.Client.View do
     end)
   end
 
-  def render({:stats, data}) do
+  def render({:stats, %Stats{average: average, max: max, limit_score_count: limit_score_count}}) do
     border(fn ->
-      IO.puts()
+      IO.puts("Your averge score is: #{average}")
+      IO.puts("Your maximum score is: #{max}")
+      IO.puts("You have hit 21 #{limit_score_count} time(s)")
     end)
   end
 
-  def render({view, _data}) do
+  def render({view, data}) do
     IO.inspect(view, label: "rendering")
   end
 
