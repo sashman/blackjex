@@ -50,3 +50,4 @@ Given time to improve, I would tackle the following areas:
   - Switch to using `GenServer.start_link({:global, __MODULE__}, %{}, name: __MODULE__)` namer registration to prevent multiple servers running by both client and server. This would also prevent the client needing to use `sid` (server id), every time it wants to send a command
   - Push the command interface into the server itself, so the client can call a clean `Server.join(...)`, `Server.join()`, etc calls.
 - Some refactoring of constants in the Game module, e.g. score limit of 21 is spread through out a few modules.
+- Try including the server into a Phoenix app and see if it could be integrated via Endpoint and enable HTTP clients.
