@@ -79,3 +79,4 @@ Given time to improve, I would tackle the following areas:
 - Try including the server into a Phoenix app and see if it could be integrated via Endpoint and enable HTTP clients.
 - For the docker solution explore a better approach than starting `epmd` manually on the client side.
 - Logging on the server side for service transparency
+- Graceful session handling, e.g. if the server dies, let the client shut down properly, also handle timing out a game on the sever side for clients that are inactive.
